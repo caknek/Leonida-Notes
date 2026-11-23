@@ -12,20 +12,22 @@ jobs:
   apk:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
 
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
           cache: gradle
 
-      - uses: android-actions/setup-android@v3
+      # El runner de GitHub ya trae el SDK de Android instalado (ANDROID_HOME)
+      - name: Aceptar licencias del SDK de Android
+        run: yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
 
       - name: Instalar dependencias y preparar la app
         run: |
@@ -39,9 +41,10 @@ jobs:
           if [ -n "$KEYSTORE_BASE64" ]; then
             echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/leonida.keystore"
             echo "KEYSTORE_FILE=$RUNNER_TEMP/leonida.keystore" >> "$GITHUB_ENV"
+            echo "HAS_KEY=1" >> "$GITHUB_ENV"
             echo "Firmando con tu llave propia."
           else
-            echo "::warning::No hay secreto KEYSTORE_BASE64: se firma con llave de depuración. Las actualizaciones podrían requerir desinstalar."
+            echo "::warning::Falta el secreto KEYSTORE_BASE64: se compila una prueba con llave de depuración y NO se publica en Releases."
           fi
 
       - name: Compilar APK
@@ -54,12 +57,13 @@ jobs:
           mkdir -p ../dist
           cp app/build/outputs/apk/release/app-release.apk "../dist/LeonidaNotes-v2.0.${{ github.run_number }}.apk"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: LeonidaNotes-apk
           path: dist/*.apk
 
       - name: Publicar en Releases
+        if: env.HAS_KEY == '1'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: v2.0.${{ github.run_number }}
