@@ -6,7 +6,7 @@ import { actions } from '../actions.js';
 import { tap, ImpactStyle, openUrl, speak } from '../native.js';
 
 const FEATURES = [
-  { to: 'map', ico: 'compass', name: 'Navegación', sub: 'Ruta y guía de voz', c: '#39d3c3' },
+  { to: 'map', ico: 'compass', name: 'Navegación', sub: 'Capas, ruta y voz', c: '#39d3c3' },
   { to: 'ign', ico: 'ign', name: 'Mapa IGN', sub: 'Mapa interactivo', c: '#ff9d4d' },
   { to: 'memories', ico: 'mic', name: 'Memorias de voz', sub: 'Graba recuerdos', c: '#ff5c8d' },
   { to: 'studio', ico: 'camera', name: 'Estudio de fotos', sub: 'Marcos y stickers', c: '#e8c37a' },

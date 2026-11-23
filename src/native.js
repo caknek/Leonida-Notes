@@ -16,7 +16,7 @@ export async function tap(style = ImpactStyle.Light) {
 }
 export async function openUrl(url) {
   if (isNative) await Browser.open({ url, toolbarColor: '#0a1220', presentationStyle: 'fullscreen' });
-  else window.open(url, '_blank', 'noopener');
+  else { window.__ignOpened = true; window.open(url, '_blank', 'noopener'); }
 }
 
 // Guía de voz
@@ -67,3 +67,9 @@ export async function shareText(title, text) {
     else { await navigator.clipboard.writeText(text); return 'copied'; }
   } catch {}
 }
+
+// Aviso cuando el usuario vuelve del navegador interno (p. ej. desde el mapa de IGN)
+const browserClosedFns = [];
+export const onBrowserClosed = (fn) => browserClosedFns.push(fn);
+if (isNative) Browser.addListener('browserFinished', () => browserClosedFns.forEach((f) => f()));
+else window.addEventListener('focus', () => { if (window.__ignOpened) { window.__ignOpened = false; browserClosedFns.forEach((f) => f()); } });

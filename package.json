@@ -1,7 +1,7 @@
 {
   "name": "leonida-notes",
   "version": "2.0.0",
-  "description": "Leonida Notes: app compa\u00f1era no oficial para GTA VI (uso personal)",
+  "description": "Leonida Notes: app compañera no oficial para GTA VI (uso personal)",
   "scripts": {
     "build": "esbuild src/main.js --bundle --minify --format=iife --target=es2020 --outfile=www/js/app.js",
     "sync": "npm run build && npx cap sync android",
@@ -21,6 +21,7 @@
     "@fontsource/playfair-display": "^5.3.0",
     "jsqr": "^1.4.0",
     "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
     "lz-string": "^1.5.0",
     "qrcode": "^1.5.4"
   },

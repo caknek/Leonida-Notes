@@ -27,7 +27,7 @@ views.settings = () => {
     <div class="menu">
       <button data-act="go" data-to="sessions"><span class="mi">${icon('clock', 20)}</span><span class="grow">Historial de sesiones</span><span class="chev">›</span></button>
       <button data-act="links"><span class="mi">${icon('ign', 20)}</span><span class="grow">Accesos rápidos</span><span class="chev">›</span></button>
-      <button data-act="tab" data-to="map"><span class="mi">${icon('image', 20)}</span><span class="grow">Imagen y escala del mapa<div class="small muted">En Navegación → botón de imagen</div></span><span class="chev">›</span></button>
+      <button data-act="tab" data-to="map"><span class="mi">${icon('image', 20)}</span><span class="grow">Capas, fondo y ayudas del mapa<div class="small muted">En Navegación → botones de capas y ayudas</div></span><span class="chev">›</span></button>
     </div>
     <div class="section-title"><span class="orn">Familia y respaldo</span></div>
     <div class="menu">

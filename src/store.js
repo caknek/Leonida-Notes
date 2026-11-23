@@ -6,18 +6,55 @@ const OLD_KEY = 'leonida-companion.v1';
 export const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 export const today = (d = new Date()) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 
+export const GROUPS = [
+  { id: 'historia', name: 'Historia', color: '#ff5c8d' },
+  { id: 'colec', name: 'Coleccionables', color: '#39d3c3' },
+  { id: 'actividades', name: 'Actividades', color: '#a77bff' },
+  { id: 'servicios', name: 'Servicios y tiendas', color: '#ffb347' },
+  { id: 'propiedades', name: 'Propiedades', color: '#e8c37a' },
+  { id: 'transporte', name: 'Transporte', color: '#4f9bff' },
+  { id: 'lugares', name: 'Lugares', color: '#7ee081' },
+];
+const C = (id, name, emoji, group, color) => ({ id, name, emoji, group, color: color || GROUPS.find((g) => g.id === group).color });
 export const CATS = [
-  { id: 'mision', name: 'Misión', emoji: '🎬', color: '#ff5c8d' },
-  { id: 'colec', name: 'Coleccionable', emoji: '💎', color: '#39d3c3' },
-  { id: 'tienda', name: 'Tienda', emoji: '🛒', color: '#ffb347' },
-  { id: 'negocio', name: 'Negocio', emoji: '💼', color: '#e8c37a' },
-  { id: 'vehiculo', name: 'Vehículo', emoji: '🚗', color: '#4f9bff' },
-  { id: 'arma', name: 'Armas', emoji: '🔫', color: '#c0c6d4' },
-  { id: 'actividad', name: 'Actividad', emoji: '🎯', color: '#a77bff' },
-  { id: 'escondite', name: 'Escondite', emoji: '🏠', color: '#7ee081' },
-  { id: 'interes', name: 'Lugar de interés', emoji: '📸', color: '#ff8a5c' },
-  { id: 'peligro', name: 'Peligro', emoji: '⚠️', color: '#ff4f64' },
-  { id: 'otro', name: 'Otro', emoji: '📍', color: '#a9b4c8' },
+  C('mision', 'Misión principal', '🎬', 'historia'),
+  C('secundaria', 'Misión secundaria', '🧭', 'historia'),
+  C('encargo', 'Encargo / contacto', '📞', 'historia'),
+  C('evento', 'Evento aleatorio', '❗', 'historia'),
+  C('golpe', 'Golpe / atraco', '💰', 'historia'),
+  C('colec', 'Coleccionable', '💎', 'colec'),
+  C('oculto', 'Objeto oculto', '🗝️', 'colec'),
+  C('tesoro', 'Tesoro / alijo', '🧳', 'colec'),
+  C('foto', 'Punto fotográfico', '📷', 'colec'),
+  C('fauna', 'Fauna', '🦩', 'colec'),
+  C('actividad', 'Actividad', '🎯', 'actividades'),
+  C('carrera', 'Carrera', '🏁', 'actividades'),
+  C('acrobacia', 'Salto / acrobacia', '🏍️', 'actividades'),
+  C('deporte', 'Deporte', '⛳', 'actividades'),
+  C('pesca', 'Pesca', '🎣', 'actividades'),
+  C('minijuego', 'Minijuego / casino', '🎲', 'actividades'),
+  C('fiesta', 'Fiesta / club', '🪩', 'actividades'),
+  C('tienda', 'Tienda', '🛒', 'servicios'),
+  C('arma', 'Armería', '🔫', 'servicios'),
+  C('ropa', 'Ropa', '👕', 'servicios'),
+  C('barberia', 'Barbería / tatuajes', '💈', 'servicios'),
+  C('taller', 'Taller mecánico', '🔧', 'servicios'),
+  C('gasolina', 'Gasolinera', '⛽', 'servicios'),
+  C('comida', 'Comida', '🍔', 'servicios'),
+  C('hospital', 'Hospital', '🏥', 'servicios'),
+  C('policia', 'Policía', '🚓', 'servicios'),
+  C('escondite', 'Escondite', '🏠', 'propiedades'),
+  C('negocio', 'Negocio', '💼', 'propiedades'),
+  C('garaje', 'Garaje', '🅿️', 'propiedades'),
+  C('vehiculo', 'Vehículo', '🚗', 'transporte'),
+  C('barco', 'Barco / muelle', '🚤', 'transporte'),
+  C('aereo', 'Aeródromo / helipuerto', '✈️', 'transporte'),
+  C('interes', 'Lugar de interés', '🏛️', 'lugares'),
+  C('mirador', 'Mirador', '🌅', 'lugares'),
+  C('playa', 'Playa', '🏖️', 'lugares'),
+  C('naturaleza', 'Naturaleza', '🐊', 'lugares'),
+  C('peligro', 'Peligro', '⚠️', 'lugares', '#ff4f64'),
+  C('otro', 'Otro', '📍', 'lugares', '#a9b4c8'),
 ];
 export const catById = (id) => CATS.find((c) => c.id === id) || CATS[CATS.length - 1];
 
@@ -29,6 +66,9 @@ const DEFAULT_LISTS = [
   ['Negocios y propiedades', '🏠'], ['Vehículos', '🚗'], ['Logros y trofeos', '🏆'],
 ];
 
+// Ayudas del mapa (cada jugador decide)
+export const ASSIST_DEFAULTS = { hiddenCats: [], hiddenPacks: [], route: true, distance: true, proximity: true, proxKm: 0.4, spoilers: false, labels: true, cluster: true, arrive: true };
+
 // ---------------------------------------------------------------- modelo
 function blankStats() {
   return { objectives: 0, pinsVisited: 0, pinsCreated: 0, photos: 0, memories: 0, spins: 0, challenges: 0, qrShared: 0 };
@@ -37,12 +77,12 @@ export function newProfile(name, emoji = '😎', color = PROFILE_COLORS[0]) {
   return {
     id: uid(), name, emoji, color, createdAt: Date.now(),
     lists: DEFAULT_LISTS.map(([n, e]) => ({ id: uid(), name: n, emoji: e, items: [] })),
-    pins: [], notes: [], memories: [], photos: [], sessions: [], running: null,
+    pins: [], notes: [], memories: [], photos: [], packs: [], sessions: [], running: null,
     xp: 0, stats: blankStats(), medals: {}, dayLog: {}, daily: null, me: null, navTarget: null,
   };
 }
 function fixProfile(p) {
-  p.memories ||= []; p.photos ||= []; p.notes ||= []; p.pins ||= []; p.lists ||= []; p.sessions ||= [];
+  p.memories ||= []; p.photos ||= []; p.packs ||= []; p.notes ||= []; p.pins ||= []; p.lists ||= []; p.sessions ||= [];
   p.xp ||= 0; p.stats = { ...blankStats(), ...(p.stats || {}) }; p.medals ||= {}; p.dayLog ||= {};
   if (p.daily === undefined) p.daily = null;
   if (p.me === undefined) p.me = null;
@@ -56,14 +96,16 @@ function defaultState() {
       { id: uid(), name: 'Mapa interactivo IGN', url: IGN_URL },
       { id: uid(), name: 'Rockstar Games — GTA VI', url: 'https://www.rockstargames.com/VI' },
     ],
-    settings: { hideDone: false, voice: true, voiceRate: 1, mapKm: 12, onboarded: false },
+    settings: { hideDone: false, voice: true, voiceRate: 1, mapKm: 12, onboarded: false, ...ASSIST_DEFAULTS, hiddenCats: [], hiddenPacks: [] },
   };
 }
 function normalize(s) {
   if (!s?.profiles?.length) return defaultState();
   s.app = 'leonida-notes'; s.version = 2;
-  s.settings = { hideDone: false, voice: true, voiceRate: 1, mapKm: 12, onboarded: true, ...(s.settings || {}) };
+  s.settings = { hideDone: false, voice: true, voiceRate: 1, mapKm: 12, onboarded: true, ...ASSIST_DEFAULTS, ...(s.settings || {}) };
   s.links ||= [];
+  s.settings.hiddenCats = [...(s.settings.hiddenCats || [])];
+  s.settings.hiddenPacks = [...(s.settings.hiddenPacks || [])];
   s.profiles.forEach(fixProfile);
   if (!s.profiles.some((p) => p.id === s.active)) s.active = s.profiles[0].id;
   return s;
