@@ -1,0 +1,13 @@
+{
+  "appId": "com.miguelromero.leonidacompanion",
+  "appName": "Leonida Companion",
+  "webDir": "www",
+  "backgroundColor": "#0d0a16",
+  "android": {
+    "backgroundColor": "#0d0a16",
+    "allowMixedContent": false
+  },
+  "plugins": {
+    "SystemBars": { "style": "DARK", "insetsHandling": "css" }
+  }
+}

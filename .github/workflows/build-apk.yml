@@ -1,0 +1,71 @@
+name: Compilar APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+          cache: gradle
+
+      - uses: android-actions/setup-android@v3
+
+      - name: Instalar dependencias y preparar la app
+        run: |
+          npm ci
+          npm run sync
+
+      - name: Preparar llave de firma
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/leonida.keystore"
+            echo "KEYSTORE_FILE=$RUNNER_TEMP/leonida.keystore" >> "$GITHUB_ENV"
+            echo "Firmando con tu llave propia."
+          else
+            echo "::warning::No hay secreto KEYSTORE_BASE64: se firma con llave de depuración. Las actualizaciones podrían requerir desinstalar."
+          fi
+
+      - name: Compilar APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        working-directory: android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --no-daemon
+          mkdir -p ../dist
+          cp app/build/outputs/apk/release/app-release.apk "../dist/LeonidaCompanion-v1.0.${{ github.run_number }}.apk"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LeonidaCompanion-apk
+          path: dist/*.apk
+
+      - name: Publicar en Releases
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.${{ github.run_number }}
+          name: Leonida Companion v1.0.${{ github.run_number }}
+          body: |
+            Descarga el archivo **.apk** de abajo en tu Android y ábrelo para instalar.
+            Si ya tienes la app, se actualiza sin perder tus datos.
+          files: dist/*.apk
+          make_latest: true
