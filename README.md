@@ -1,34 +1,37 @@
-# Leonida Companion
+# Leonida Notes
 
-App compañera **no oficial** para GTA VI, para uso personal y familiar. No está afiliada con Rockstar Games, Take-Two ni IGN.
+Cuaderno de viaje **no oficial** para GTA VI, para uso personal y familiar. Toma la idea de las apps compañeras de juegos de mundo abierto: navegación con voz, medallas, bono diario, fotos y memorias. No está afiliada con Rockstar Games, Take-Two, Nintendo ni IGN.
 
-## Qué hace
+## Funciones
 
-- **Mapa IGN**: abre el mapa interactivo de IGN (https://www.ign.com/maps/gta-6/leonida) dentro de la app. Tu sesión de IGN se mantiene.
-- **Mi mapa**: carga una captura del mapa del juego y ponle tus propios pines (11 categorías, notas, visitado/no visitado, filtros, búsqueda, mover pines). Mantén presionado para soltar un pin rápido.
-- **Progreso**: checklists (misiones, coleccionables, vehículos, etc.). Puedes pegar listas enteras desde cualquier guía y compartirlas como texto por WhatsApp.
-- **Notas**: bitácora con búsqueda y notas fijadas.
-- **Sesiones**: cronómetro de juego e historial por perfil.
-- **Perfiles**: cada persona de la familia lleva su propio progreso en el mismo teléfono.
-- **Respaldo**: exporta o importa tu perfil o todo. Sirve para pasar pines y listas entre teléfonos.
+| Función | Qué hace |
+|---|---|
+| **Navegación** | Tu mapa (captura del juego o cuadrícula) con pines en 11 categorías. Marcas tu posición y eliges "lo más cercano" (todo o por categoría): la app traza la ruta, da distancia y rumbo, y la **guía de voz** te indica. Al tocar **Llegué** ganas XP y te propone el siguiente lugar. También muestra tu progreso de descubrimiento por categoría. |
+| **Mapa IGN** | Abre el mapa interactivo de IGN dentro de la app. |
+| **Memorias de voz** | Grabas audios o escribes memorias para que la guía las narre. Si las vinculas a un pin, suenan al llegar. |
+| **Estudio de fotos** | 7 filtros, 6 marcos (Postal, Instantánea, Neón, Cine, Revista), stickers que se pueden arrastrar, textos y fecha estilo cámara. Álbum y opción de compartir. |
+| **Compartir QR** | Pasas un lugar, una lista o tu perfil a otro teléfono con un código QR, sin internet. Incluye escáner con la cámara o desde una imagen. |
+| **Mis datos** | Nivel, XP, títulos, 12 medallas con 4 rangos (Bronce, Plata, Oro y Maestro) y estadísticas. |
+| **Datos familiares** | Podio y comparación entre los perfiles de la familia. |
+| **Bono diario** | Una ruleta al día: XP directo, XP doble o un reto con premio. |
+| **Checklists, Bitácora y Sesiones** | Listas pegables, notas y cronómetro de juego con historial semanal. |
 
-## Compilar el APK (automático con GitHub Actions)
+## Compilar el APK (GitHub Actions)
 
-1. Sube este proyecto a un repositorio de GitHub (rama `main`).
-2. En el repo, ve a **Settings → Secrets and variables → Actions → New repository secret** y crea:
-   - `KEYSTORE_BASE64`: el contenido del archivo `KEYSTORE_BASE64.txt`
-   - `KEYSTORE_PASSWORD`: el contenido del archivo `KEYSTORE_PASSWORD.txt`
-3. En la pestaña **Actions**, abre "Compilar APK" y pulsa **Run workflow**. Cada push a `main` también lo ejecuta.
-4. Al terminar (unos 5 minutos), el APK queda en **Releases**. Descárgalo en el teléfono, ábrelo y permite "instalar apps desconocidas".
+1. En el repo, ve a **Settings → Secrets and variables → Actions** y crea dos secretos:
+   - `KEYSTORE_BASE64`: el contenido de `KEYSTORE_BASE64.txt`
+   - `KEYSTORE_PASSWORD`: el contenido de `KEYSTORE_PASSWORD.txt`
+2. Cada push a `main` compila el APK. También puedes ir a **Actions → Compilar APK → Run workflow**.
+3. El APK queda en **Releases**. Descárgalo en el teléfono e instálalo (permite "instalar apps desconocidas").
 
-Las nuevas versiones se instalan encima de la anterior sin perder datos, siempre que uses la misma llave (los secretos).
+Las versiones nuevas se instalan encima sin perder datos, siempre que uses la misma llave.
 
 ## Desarrollo
 
 ```bash
 npm install
-npm run serve          # prueba en el navegador: http://localhost:8765
-npm run sync           # compila la web y la copia al proyecto Android
+npm run serve   # prueba en el navegador: http://localhost:8765
+npm run sync    # compila la web y la copia al proyecto Android
 ```
 
-El código de la app está en `src/main.js` y `www/css/app.css`.
+Código: `src/` (módulos por vista) y `www/css/app.css`.

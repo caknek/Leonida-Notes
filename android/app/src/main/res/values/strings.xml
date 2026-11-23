@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Leonida Companion</string>
-    <string name="title_activity_main">Leonida Companion</string>
+    <string name="app_name">Leonida Notes</string>
+    <string name="title_activity_main">Leonida Notes</string>
     <string name="package_name">com.miguelromero.leonidacompanion</string>
     <string name="custom_url_scheme">com.miguelromero.leonidacompanion</string>
 </resources>

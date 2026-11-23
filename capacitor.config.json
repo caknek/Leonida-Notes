@@ -1,13 +1,16 @@
 {
   "appId": "com.miguelromero.leonidacompanion",
-  "appName": "Leonida Companion",
+  "appName": "Leonida Notes",
   "webDir": "www",
-  "backgroundColor": "#0d0a16",
+  "backgroundColor": "#0a1220",
   "android": {
-    "backgroundColor": "#0d0a16",
+    "backgroundColor": "#0a1220",
     "allowMixedContent": false
   },
   "plugins": {
-    "SystemBars": { "style": "DARK", "insetsHandling": "css" }
+    "SystemBars": {
+      "style": "DARK",
+      "insetsHandling": "css"
+    }
   }
 }
